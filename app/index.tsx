@@ -15,6 +15,12 @@ export default function HomeScreen() {
     setGoals(currentGoals => [...currentGoals, { text: goalsText, id: Math.random().toString() }]);
   }
 
+  const deleteGoalHandler = (id: string) => {
+    setGoals(currentGols => {
+      return currentGols.filter((goal) => goal.id !== id)
+    })
+  }
+
   return (
     <View style={styles.appContainer}>
       <GoalInput addGoalHandler={addGoalHandler} />
@@ -28,7 +34,7 @@ export default function HomeScreen() {
           keyExtractor={(item, index) => {
             return item.id;
           }}
-          renderItem={itemData => <GoalItem text={itemData.item.text} />}
+          renderItem={itemData => <GoalItem onDelete={deleteGoalHandler} item={itemData.item} />}
         />
       </View>
     </View>
