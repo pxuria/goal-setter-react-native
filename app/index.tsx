@@ -1,49 +1,35 @@
+import GoalInput from '@/components/GoalInput';
+import GoalItem from '@/components/GoalItem';
 import { useState } from 'react';
-import { Button, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
+interface Igoal {
+  text: string;
+  id: string;
+}
 
 export default function HomeScreen() {
-  const [goalsText, setGoalText] = useState<string>("");
-  const [goals, setGoals] = useState<string[]>([]);
+  const [goals, setGoals] = useState<Igoal[]>([]);
 
-  function getInputHandler(enteredText: string) {
-    setGoalText(enteredText)
-  }
-
-  const addGoalHandler = () => {
-    if (goalsText !== "") {
-      setGoals(currentGoals => [...currentGoals, goalsText]);
-      setGoalText("")
-    } else {
-      return;
-    }
+  const addGoalHandler = (goalsText: string) => {
+    setGoals(currentGoals => [...currentGoals, { text: goalsText, id: Math.random().toString() }]);
   }
 
   return (
     <View style={styles.appContainer}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder='Add goal'
-          style={styles.textInput}
-          value={goalsText}
-          onChangeText={getInputHandler}
-        />
-        <Button
-          title='Add GOAL'
-          onPress={addGoalHandler}
-        />
-      </View>
+      <GoalInput addGoalHandler={addGoalHandler} />
 
-      <View style={styles.goalsContainer}>
+      <View>
         <Text style={styles.goalsHeader}>List of goals</Text>
 
-        <ScrollView style={styles.goalsListContainer}>
-          {goals.map(goal => (
-            <View style={styles.goalItem} key={goal}>
-              <Text style={styles.goalText}>{goal}</Text>
-            </View>
-          ))}
-        </ScrollView>
+        <FlatList
+          data={goals}
+          style={styles.goalsListContainer}
+          keyExtractor={(item, index) => {
+            return item.id;
+          }}
+          renderItem={itemData => <GoalItem text={itemData.item.text} />}
+        />
       </View>
     </View>
   );
@@ -55,23 +41,6 @@ const styles = StyleSheet.create({
     paddingInline: 16,
     flex: 1
   },
-  inputContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: 'center',
-    paddingBottom: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: '#cccccc',
-    // flex: 20
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    width: "70%",
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
-    padding: 8
-  },
   goalsHeader: {
     color: "#2391cf",
     fontSize: 24,
@@ -79,21 +48,8 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 16
   },
-  goalsContainer: {
-    // flex: 80
-  },
   goalsListContainer: {
     flexDirection: 'column'
   },
-  goalItem: {
-    borderRadius: 8,
-    backgroundColor: "#615ed5",
-    padding: 16,
-    marginBottom: 16,
-  },
-  goalText: {
-    color: "white",
-    fontSize: 20,
-    fontWeight: 500
-  }
+
 });
