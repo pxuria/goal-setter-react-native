@@ -1,7 +1,7 @@
 import GoalInput from '@/components/GoalInput';
 import GoalItem from '@/components/GoalItem';
 import { useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { Button, FlatList, StyleSheet, Text, View } from 'react-native';
 
 interface Igoal {
   text: string;
@@ -9,10 +9,20 @@ interface Igoal {
 }
 
 export default function HomeScreen() {
+  const [modalOpen, setModalOpen] = useState(false);
   const [goals, setGoals] = useState<Igoal[]>([]);
+
+  function startAddGoalHandler() {
+    setModalOpen(true)
+  }
+
+  function closeAddGoalHandler() {
+    setModalOpen(false);
+  }
 
   const addGoalHandler = (goalsText: string) => {
     setGoals(currentGoals => [...currentGoals, { text: goalsText, id: Math.random().toString() }]);
+    closeAddGoalHandler();
   }
 
   const deleteGoalHandler = (id: string) => {
@@ -23,7 +33,18 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.appContainer}>
-      <GoalInput addGoalHandler={addGoalHandler} />
+      <View style={styles.addGoal}>
+        <Button
+          color="#5e0acc"
+          title='Add new goal'
+          onPress={startAddGoalHandler}
+        />
+      </View>
+      <GoalInput
+        modalOpen={modalOpen}
+        addGoalHandler={addGoalHandler}
+        closeAddGoalHandler={closeAddGoalHandler}
+      />
 
       <View>
         <Text style={styles.goalsHeader}>List of goals</Text>
@@ -43,10 +64,11 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   appContainer: {
-    paddingTop: 50,
+    paddingTop: 64,
     paddingInline: 16,
     flex: 1
   },
+  addGoal: {},
   goalsHeader: {
     color: "#2391cf",
     fontSize: 24,
