@@ -1,7 +1,9 @@
-import GoalInput from '@/components/GoalInput';
-import GoalItem from '@/components/GoalItem';
+import { StatusBar } from "expo-status-bar";
 import { useState } from 'react';
 import { Button, FlatList, StyleSheet, Text, View } from 'react-native';
+
+import GoalInput from '@/components/GoalInput';
+import GoalItem from '@/components/GoalItem';
 
 interface Igoal {
   text: string;
@@ -32,48 +34,56 @@ export default function HomeScreen() {
   }
 
   return (
-    <View style={styles.appContainer}>
-      <View style={styles.addGoal}>
-        <Button
-          color="#5e0acc"
-          title='Add new goal'
-          onPress={startAddGoalHandler}
-        />
-      </View>
-      <GoalInput
-        modalOpen={modalOpen}
-        addGoalHandler={addGoalHandler}
-        closeAddGoalHandler={closeAddGoalHandler}
-      />
+    <>
+      <StatusBar style='light' />
 
-      <View>
-        <Text style={styles.goalsHeader}>List of goals</Text>
-
-        <FlatList
-          data={goals}
-          style={styles.goalsListContainer}
-          keyExtractor={(item, index) => {
-            return item.id;
-          }}
-          renderItem={itemData => <GoalItem onDelete={deleteGoalHandler} item={itemData.item} />}
+      <View style={styles.appContainer}>
+        <View style={styles.addGoal}>
+          <Button
+            color="#a065ec"
+            title='Add new goal'
+            onPress={startAddGoalHandler}
+          />
+        </View>
+        <GoalInput
+          modalOpen={modalOpen}
+          addGoalHandler={addGoalHandler}
+          closeAddGoalHandler={closeAddGoalHandler}
         />
+
+        <View>
+          <Text style={styles.goalsHeader}>List of goals</Text>
+
+          <FlatList
+            data={goals}
+            style={styles.goalsListContainer}
+            keyExtractor={(item, index) => {
+              return item.id;
+            }}
+            renderItem={itemData => <GoalItem onDelete={deleteGoalHandler} item={itemData.item} />}
+          />
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   appContainer: {
-    paddingTop: 64,
+    paddingTop: 72,
     paddingInline: 16,
     flex: 1
   },
-  addGoal: {},
+  addGoal: {
+    borderRadius: 6,
+    overflow: "hidden"
+  },
   goalsHeader: {
-    color: "#2391cf",
+    color: "white",
     fontSize: 24,
     fontWeight: 700,
-    marginTop: 8,
+    marginTop: 16,
+    textAlign: 'center',
     marginBottom: 16
   },
   goalsListContainer: {

@@ -27,9 +27,11 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: "#615ed5",
         marginBottom: 16,
+        overflow: "hidden",
     },
     pressedItem: {
-        opacity: 0.75
+        opacity: 0.75,
+        backgroundColor: "#f31282"
     },
     goalText: {
         color: "white",
